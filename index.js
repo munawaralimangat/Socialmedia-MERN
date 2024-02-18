@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url';
 import path from 'path';
 import { dirname } from 'path';
 import { error } from "console";
+import {register} from "./controllers/auth.js"
 
 //configuration 
 const __filename = fileURLToPath(import.meta.url);
@@ -37,15 +38,16 @@ const storage = multer.diskStorage({
 })
 const upload = multer({storage})
 
-app.get('/',(req,res)=>{
-    res.json(``)
-})
+
+//ROUTES
+app.post('/auth/register',upload.single("picture"),register)
 
 const PORT = process.env.PORT || 6001
 mongoose.connect(process.env.MONGO_URL,{
     useNewUrlparser:true,
     useUnifiedTopology:true
 })
+
 .then(()=>{
     app.listen(PORT,()=>{
         console.log(`server port ${PORT}-mongodb atlas`)
