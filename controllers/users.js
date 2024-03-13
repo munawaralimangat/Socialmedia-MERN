@@ -22,7 +22,7 @@ export const getUserFriends = async(req,res)=>{
 export const addRemoveFriend = async(req,res)=>{
     try {
         
-    } catch (err) {
+    } catch ( err ) {
         res.status(404).json({msg:err.message})
     }
 }
