@@ -11,8 +11,12 @@ import path from 'path';
 import { dirname } from 'path';
 import { error } from "console";
 import authroutes from "./routes/auth.js";
-import userRoutes from "./routes/users.js"
-import {register} from "./controllers/auth.js   "
+import userRoutes from "./routes/users.js";
+import postRoutes from "./routes/postRoutes.js";
+import {register} from "./controllers/auth.js";
+import {createPost} from "./controllers/posts.js";
+import { verifyToken } from "./middleware/auth.js";
+import { create } from "domain";
 
 //configuration 
 const __filename = fileURLToPath(import.meta.url);
@@ -42,11 +46,13 @@ const upload = multer({storage})
 
 
 //ROUTES with files
-app.post('/auth/register',upload.single("picture"),register)
+app.post('/auth/register',upload.single("picture"),verifyToken, register);
+app.post('/posts',verifyToken,upload.single("picture"),createPost)
 
 //ROUTES
 app.use('/auth',authroutes);
-app.use('/users',userRoutes)
+app.use('/users',userRoutes);
+app.use('/posts',postRoutes)
 
 const PORT = process.env.PORT || 6001
 mongoose.connect(process.env.MONGO_URL,{
